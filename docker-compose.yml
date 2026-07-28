@@ -32,5 +32,18 @@ services:
       db:
         condition: service_healthy
 
+  admin-ui:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${ADMIN_UI_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${ADMIN_UI_PASSWORD}
+    ports:
+      - "127.0.0.1:5050:80"
+    volumes:
+      - admin-ui-data:/var/lib/pgadmin
+
 volumes:
   todo-db-data:
+  admin-ui-data:
