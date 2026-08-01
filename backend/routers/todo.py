@@ -20,9 +20,14 @@ async def list_of_todos(db: DbDep):
 async def create_todo(data: TodoCreate, db: DbDep):
     return await TodoService(db).create(data.text)
 
-@router.patch("/", response_model=TodoResponse)
-async def update_todo(data: TodoUpdate, db: DbDep):
-    todo = await TodoService(db).update_by_text(data.text, data.finished)
+@router.patch("/{todo_id}", response_model=TodoResponse)
+async def update_todo(todo_id: int, data: TodoUpdate, db: DbDep):
+    todo = await TodoService(db).update(todo_id, data)
     if todo is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found")
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Todo not found")
     return todo
+
+@router.delete("/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_todo(todo_id: int, db: DbDep):
+    if not await TodoService(db).delete(todo_id):
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Todo not found")

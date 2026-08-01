@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from sqlalchemy import text
 
 from backend.config import settings
 from backend.database import engine

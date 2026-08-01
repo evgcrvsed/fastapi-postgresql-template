@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.models import Todo
+from backend.schemas import TodoUpdate
 
 
 class TodoService:
@@ -19,14 +20,24 @@ class TodoService:
         await self.db.refresh(todo)
         return todo
 
-    async def update_by_text(self, text: str, finished: bool) -> Todo | None:
-        result = await self.db.execute(select(Todo).where(Todo.text == text))
-        todo: Todo = result.scalar_one_or_none()
+    async def update(self, todo_id: int, data: TodoUpdate) -> Todo | None:
+        todo = await self.db.get(Todo, todo_id)
 
         if todo is None:
             return None
 
-        todo.finished = finished
+        for field, value in data.model_dump(exclude_unset=True).items():
+            setattr(todo, field, value)
+
         await self.db.commit()
         await self.db.refresh(todo)
         return todo
+
+    async def delete(self, todo_id: int) -> bool:
+        todo = await self.db.get(Todo, todo_id)
+        if todo is None:
+            return False
+
+        await self.db.delete(todo)
+        await self.db.commit()
+        return True

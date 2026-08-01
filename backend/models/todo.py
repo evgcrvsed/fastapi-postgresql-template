@@ -11,7 +11,7 @@ class Todo(Base):
     __tablename__ = "todos"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    text: Mapped[str] = mapped_column(String(255), nullable=False)
+    text: Mapped[str] = mapped_column(String(1000), nullable=False)
     finished: Mapped[bool] = mapped_column(Boolean, default=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
