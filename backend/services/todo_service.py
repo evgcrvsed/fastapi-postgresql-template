@@ -22,7 +22,6 @@ class TodoService:
 
     async def update(self, todo_id: int, data: TodoUpdate) -> Todo | None:
         todo = await self.db.get(Todo, todo_id)
-
         if todo is None:
             return None
 

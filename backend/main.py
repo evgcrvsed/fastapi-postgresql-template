@@ -4,10 +4,9 @@ from fastapi import FastAPI
 
 from backend.config import settings
 from backend.database import engine
-
 from backend.models import Base
-
 from backend.routers import TodoRouter
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,6 +22,4 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.include_router(
-    TodoRouter,
-)
+app.include_router(TodoRouter)
