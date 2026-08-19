@@ -8,7 +8,6 @@ from backend.schemas import TodoCreate, TodoResponse, TodoUpdate
 from backend.services import TodoService
 
 router = APIRouter(prefix="/api/todos", tags=["todos"])
-
 DbDep = Annotated[AsyncSession, Depends(get_db)]
 
 
